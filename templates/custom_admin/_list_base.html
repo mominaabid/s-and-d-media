@@ -1,0 +1,60 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}{{ section_title }}{% endblock %}
+{% block page_title %}{{ section_title }}{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> {{ section_title }}{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+  <div>
+    <h2 class="section-title">{{ section_title }}</h2>
+    <p class="section-sub">{{ section_sub }}</p>
+  </div>
+  {% if add_url %}
+  <a href="{{ add_url }}" class="btn btn-primary">
+    <i class="fa-solid fa-plus"></i> Add {{ item_name }}
+  </a>
+  {% endif %}
+</div>
+
+{% if extra_actions %}
+<div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
+  {% for action in extra_actions %}
+  <a href="{{ action.url }}" class="btn {{ action.style }}">{{ action.label }}</a>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="card" style="padding:0">
+  {% if objects %}
+  <div class="table-wrap">
+    {% block table_content %}{% endblock %}
+  </div>
+  {% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-chevron-left"></i></a>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <span class="current">{{ num }}</span>
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a href="?page={{ num }}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}"><i class="fa-solid fa-chevron-right"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon"><i class="{{ empty_icon|default:'fa-solid fa-folder-open' }}"></i></div>
+    <h3>No {{ section_title }} yet</h3>
+    <p style="margin-bottom:16px">Get started by adding your first {{ item_name|lower }}.</p>
+    {% if add_url %}
+    <a href="{{ add_url }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add {{ item_name }}</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

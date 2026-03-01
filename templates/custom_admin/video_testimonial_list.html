@@ -1,0 +1,35 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}Video Testimonials{% endblock %}
+{% block page_title %}Video Testimonials{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> Video Testimonials{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+  <div><h2 class="section-title">Video Testimonials</h2><p class="section-sub">Client video testimonials with optional name and designation.</p></div>
+  <a href="{% url 'cadmin:video_testimonial_add' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Testimonial</a>
+</div>
+<div class="card" style="padding:0">
+{% if objects %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Thumb</th><th>Name</th><th>Designation</th><th>Video</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for obj in objects %}
+  <tr>
+    <td><div class="thumb">{% if obj.thumbnail %}<img src="{{ obj.thumbnail.url }}" />{% else %}<i class="fa-solid fa-circle-play"></i>{% endif %}</div></td>
+    <td><div style="font-weight:600">{{ obj.name }}</div></td>
+    <td class="text-muted">{{ obj.designation|default:"–" }}</td>
+    <td>{% if obj.video_file %}<a href="{{ obj.video_file.url }}" target="_blank" class="video-link"><i class="fa-solid fa-play"></i> Play</a>{% else %}<span class="text-muted">–</span>{% endif %}</td>
+    <td class="text-muted">{{ obj.order }}</td>
+    <td>{% if obj.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge" style="background:var(--bg3);color:var(--text3)">Off</span>{% endif %}</td>
+    <td><div class="flex gap-2">
+      <a href="{% url 'cadmin:video_testimonial_edit' obj.pk %}" class="btn btn-blue btn-sm btn-icon"><i class="fa-solid fa-pen"></i></a>
+      <button onclick="confirmDelete('{% url 'cadmin:video_testimonial_delete' obj.pk %}','{{ obj.name|escapejs }}')" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-trash"></i></button>
+    </div></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-circle-play"></i></div><h3>No testimonials yet</h3><a href="{% url 'cadmin:video_testimonial_add' %}" class="btn btn-primary mt-2"><i class="fa-solid fa-plus"></i> Add Testimonial</a></div>
+{% endif %}
+</div>
+{% endblock %}

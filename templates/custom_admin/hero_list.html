@@ -1,0 +1,71 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}Hero Section{% endblock %}
+{% block page_title %}Hero Section{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> Hero Section{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+  <div>
+    <h2 class="section-title">Hero Section</h2>
+    <p class="section-sub">Manage the main heading, subtitle, and background video shown on your homepage.</p>
+  </div>
+  <a href="{% url 'cadmin:hero_add' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Hero</a>
+</div>
+
+<div class="card" style="padding:0">
+  {% if objects %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Heading</th>
+          <th>Subtitle</th>
+          <th>Video</th>
+          <th>Status</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for obj in objects %}
+        <tr>
+          <td><div style="font-weight:600;max-width:200px">{{ obj.heading|truncatechars:50 }}</div></td>
+          <td><div class="text-muted" style="max-width:200px">{{ obj.subtitle|truncatechars:60 }}</div></td>
+          <td>
+            {% if obj.background_video_url %}
+              <a href="{{ obj.background_video_url }}" target="_blank" class="video-link"><i class="fa-solid fa-play"></i> URL</a>
+            {% elif obj.background_video_file %}
+              <a href="{{ obj.background_video_file.url }}" target="_blank" class="video-link"><i class="fa-solid fa-file-video"></i> File</a>
+            {% else %}
+              <span class="text-muted">None</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if obj.is_active %}
+              <span class="badge badge-green"><span class="dot" style="background:var(--green)"></span>Active</span>
+            {% else %}
+              <span class="badge" style="background:var(--bg3);color:var(--text3)">Inactive</span>
+            {% endif %}
+          </td>
+          <td class="text-muted">{{ obj.updated_at|date:"d M Y" }}</td>
+          <td>
+            <div class="flex gap-2">
+              <a href="{% url 'cadmin:hero_edit' obj.pk %}" class="btn btn-blue btn-sm btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></a>
+              <button onclick="confirmDelete('{% url 'cadmin:hero_delete' obj.pk %}', '{{ obj.heading|escapejs }}')" class="btn btn-danger btn-sm btn-icon" title="Delete"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon"><i class="fa-solid fa-film"></i></div>
+    <h3>No hero sections</h3>
+    <p style="margin-bottom:16px">Add your homepage hero content.</p>
+    <a href="{% url 'cadmin:hero_add' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Hero</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

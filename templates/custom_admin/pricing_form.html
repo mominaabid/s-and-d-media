@@ -1,0 +1,107 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}{{ form_title }}{% endblock %}
+{% block page_title %}{{ form_title }}{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> <a href="{{ back_url }}">Pricing</a> <span class="sep">/</span> {{ form_title }}{% endblock %}
+
+{% block content %}
+<div style="max-width:780px">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+    <a href="{{ back_url }}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    <h2 class="section-title" style="margin-bottom:0">{{ form_title }}</h2>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    {% if form.errors %}
+    <div class="alert alert-error" style="margin-bottom:20px"><i class="fa-solid fa-circle-exclamation"></i> Please fix errors below.</div>
+    {% endif %}
+
+    <!-- Card Details -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title" style="margin-bottom:20px"><i class="fa-solid fa-credit-card" style="color:var(--green);margin-right:8px"></i>Card Details</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="{{ form.heading.id_for_label }}">Heading <span style="color:var(--red)">*</span></label>
+          {{ form.heading }}
+          {% for err in form.heading.errors %}<span style="color:var(--red);font-size:12px">{{ err }}</span>{% endfor %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.subheading.id_for_label }}">Subheading</label>
+          {{ form.subheading }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.card_type.id_for_label }}">Card Type <span style="color:var(--red)">*</span></label>
+          {{ form.card_type }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.button_label.id_for_label }}">Button Label</label>
+          {{ form.button_label }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.order.id_for_label }}">Display Order</label>
+          {{ form.order }}
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:10px;padding-top:28px">
+          {{ form.is_most_popular }}
+          <label for="{{ form.is_most_popular.id_for_label }}" style="text-transform:none;font-size:14px">Mark as Most Popular</label>
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:10px;padding-top:28px">
+          {{ form.is_active }}
+          <label for="{{ form.is_active.id_for_label }}" style="text-transform:none;font-size:14px">Active</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="card-title"><i class="fa-solid fa-list-check" style="color:var(--blue);margin-right:8px"></i>Feature Lines</div>
+        <button type="button" onclick="addFeature()" class="btn btn-secondary btn-sm"><i class="fa-solid fa-plus"></i> Add Line</button>
+      </div>
+      <div id="features-list">
+        {% for feature in features %}
+        <div class="feature-row" style="display:flex;gap:10px;margin-bottom:10px;align-items:center">
+          <input type="text" name="feature_text" value="{{ feature.text }}" placeholder="e.g. 3 videos of your choice" style="flex:1">
+          <input type="number" name="feature_order" value="{{ feature.order }}" style="width:80px" placeholder="Order">
+          <button type="button" onclick="this.parentElement.remove()" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-times"></i></button>
+        </div>
+        {% endfor %}
+        {% if not features %}
+        <!-- default 3 rows -->
+        {% for i in "123" %}
+        <div class="feature-row" style="display:flex;gap:10px;margin-bottom:10px;align-items:center">
+          <input type="text" name="feature_text" placeholder="e.g. Feature {{ forloop.counter }}" style="flex:1">
+          <input type="number" name="feature_order" value="{{ forloop.counter }}" style="width:80px" placeholder="Order">
+          <button type="button" onclick="this.parentElement.remove()" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-times"></i></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+      <p class="form-hint">These lines appear as checkmark bullet points on the pricing card.</p>
+    </div>
+
+    <div class="flex gap-3">
+      <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Save Card</button>
+      <a href="{{ back_url }}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% block extra_js %}
+<script>
+function addFeature() {
+  const list = document.getElementById('features-list');
+  const count = list.querySelectorAll('.feature-row').length + 1;
+  const row = document.createElement('div');
+  row.className = 'feature-row';
+  row.style = 'display:flex;gap:10px;margin-bottom:10px;align-items:center';
+  row.innerHTML = `
+    <input type="text" name="feature_text" placeholder="Feature text" style="flex:1">
+    <input type="number" name="feature_order" value="${count}" style="width:80px" placeholder="Order">
+    <button type="button" onclick="this.parentElement.remove()" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-times"></i></button>
+  `;
+  list.appendChild(row);
+}
+</script>
+{% endblock %}
+{% endblock %}

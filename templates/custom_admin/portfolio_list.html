@@ -1,0 +1,75 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}Portfolio{% endblock %}
+{% block page_title %}Portfolio{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> Portfolio{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+  <div><h2 class="section-title">Portfolio</h2><p class="section-sub">Manage categories and videos.</p></div>
+  <div class="flex gap-2">
+    <a href="{% url 'cadmin:portfolio_category_add' %}" class="btn btn-secondary"><i class="fa-solid fa-folder-plus"></i> Add Category</a>
+    <a href="{% url 'cadmin:portfolio_video_add' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Video</a>
+  </div>
+</div>
+
+<!-- Categories -->
+<h3 style="font-family:'Syne',sans-serif;font-size:15px;margin-bottom:12px;color:var(--text2)"><i class="fa-solid fa-folder" style="color:var(--orange);margin-right:6px"></i>Categories</h3>
+<div class="card" style="padding:0;margin-bottom:24px">
+{% if categories %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Name</th><th>Slug</th><th>Videos</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for cat in categories %}
+  <tr>
+    <td><div style="font-weight:600">{{ cat.name }}</div></td>
+    <td><code style="background:var(--bg3);padding:2px 8px;border-radius:5px;font-size:12px;color:var(--teal)">{{ cat.slug }}</code></td>
+    <td><span class="badge badge-orange">{{ cat.videos.count }} videos</span></td>
+    <td><span class="text-muted">{{ cat.order }}</span></td>
+    <td>{% if cat.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge" style="background:var(--bg3);color:var(--text3)">Off</span>{% endif %}</td>
+    <td><div class="flex gap-2">
+      <a href="{% url 'cadmin:portfolio_category_edit' cat.pk %}" class="btn btn-blue btn-sm btn-icon"><i class="fa-solid fa-pen"></i></a>
+      <button onclick="confirmDelete('{% url 'cadmin:portfolio_category_delete' cat.pk %}','{{ cat.name|escapejs }}')" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-trash"></i></button>
+    </div></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<div class="empty-state" style="padding:30px"><h3>No categories yet</h3><a href="{% url 'cadmin:portfolio_category_add' %}" class="btn btn-secondary btn-sm mt-2"><i class="fa-solid fa-plus"></i> Add Category</a></div>
+{% endif %}
+</div>
+
+<!-- Videos -->
+<h3 style="font-family:'Syne',sans-serif;font-size:15px;margin-bottom:12px;color:var(--text2)"><i class="fa-solid fa-film" style="color:var(--teal);margin-right:6px"></i>Videos</h3>
+<div class="card" style="padding:0">
+{% if videos %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Thumbnail</th><th>Title</th><th>Category</th><th>Video URL</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for vid in videos %}
+  <tr>
+    <td><div class="thumb">{% if vid.thumbnail %}<img src="{{ vid.thumbnail.url }}" />{% else %}<i class="fa-solid fa-video"></i>{% endif %}</div></td>
+    <td><div style="font-weight:600">{{ vid.title }}</div></td>
+    <td><span class="badge badge-orange">{{ vid.category.name }}</span></td>
+    <td>{% if vid.video_file %}<a href="{{ vid.video_file.url }}" target="_blank" class="video-link"><i class="fa-solid fa-play"></i> Play</a>{% else %}<span class="text-muted">–</span>{% endif %}</td>
+    <td class="text-muted">{{ vid.order }}</td>
+    <td>{% if vid.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge" style="background:var(--bg3);color:var(--text3)">Off</span>{% endif %}</td>
+    <td><div class="flex gap-2">
+      <a href="{% url 'cadmin:portfolio_video_edit' vid.pk %}" class="btn btn-blue btn-sm btn-icon"><i class="fa-solid fa-pen"></i></a>
+      <button onclick="confirmDelete('{% url 'cadmin:portfolio_video_delete' vid.pk %}','{{ vid.title|escapejs }}')" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-trash"></i></button>
+    </div></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% if is_paginated %}
+<div class="pagination">
+  {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-chevron-left"></i></a>{% endif %}
+  {% for num in page_obj.paginator.page_range %}{% if page_obj.number == num %}<span class="current">{{ num }}</span>{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}<a href="?page={{ num }}">{{ num }}</a>{% endif %}{% endfor %}
+  {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}"><i class="fa-solid fa-chevron-right"></i></a>{% endif %}
+</div>
+{% endif %}
+{% else %}
+<div class="empty-state" style="padding:30px"><h3>No videos yet</h3><a href="{% url 'cadmin:portfolio_video_add' %}" class="btn btn-primary btn-sm mt-2"><i class="fa-solid fa-plus"></i> Add Video</a></div>
+{% endif %}
+</div>
+{% endblock %}

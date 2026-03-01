@@ -1,0 +1,33 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}Video Types{% endblock %}
+{% block page_title %}Video Types{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> <a href="{% url 'cadmin:pricing_list' %}">Pricing</a> <span class="sep">/</span> Video Types{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+  <div><h2 class="section-title">Video Types</h2><p class="section-sub">Video types users can select in Custom Order.</p></div>
+  <a href="{% url 'cadmin:video_type_add' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Video Type</a>
+</div>
+<div class="card" style="padding:0">
+{% if objects %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Name</th><th>Price (PKR)</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for obj in objects %}
+  <tr>
+    <td style="font-weight:600">{{ obj.name }}</td>
+    <td><span style="color:var(--green);font-weight:700">{{ obj.price }}</span></td>
+    <td class="text-muted">{{ obj.order }}</td>
+    <td>{% if obj.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge" style="background:var(--bg3);color:var(--text3)">Off</span>{% endif %}</td>
+    <td><div class="flex gap-2">
+      <a href="{% url 'cadmin:video_type_edit' obj.pk %}" class="btn btn-blue btn-sm btn-icon"><i class="fa-solid fa-pen"></i></a>
+      <button onclick="confirmDelete('{% url 'cadmin:video_type_delete' obj.pk %}','{{ obj.name|escapejs }}')" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-trash"></i></button>
+    </div></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-list"></i></div><h3>No video types</h3><a href="{% url 'cadmin:video_type_add' %}" class="btn btn-primary mt-2"><i class="fa-solid fa-plus"></i> Add</a></div>
+{% endif %}
+</div>
+{% endblock %}

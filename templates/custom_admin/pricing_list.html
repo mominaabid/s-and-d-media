@@ -1,0 +1,42 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}Pricing{% endblock %}
+{% block page_title %}Pricing{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> Pricing{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+  <div><h2 class="section-title">Pricing</h2><p class="section-sub">Manage pricing cards, features, and video types for custom orders.</p></div>
+  <div class="flex gap-2">
+    <a href="{% url 'cadmin:video_type_list' %}" class="btn btn-secondary"><i class="fa-solid fa-list"></i> Video Types</a>
+    <a href="{% url 'cadmin:pricing_add' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Card</a>
+  </div>
+</div>
+<div class="card" style="padding:0;margin-bottom:24px">
+{% if objects %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Heading</th><th>Type</th><th>Features</th><th>Popular?</th><th>Button</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for obj in objects %}
+  <tr>
+    <td><div style="font-weight:600">{{ obj.heading }}</div><div class="text-muted">{{ obj.subheading|truncatechars:40 }}</div></td>
+    <td>
+      {% if obj.card_type == 'bundle' %}<span class="badge badge-blue">Bundle</span>
+      {% elif obj.card_type == 'custom' %}<span class="badge badge-green">Custom</span>
+      {% else %}<span class="badge badge-purple">Dedicated</span>{% endif %}
+    </td>
+    <td><span class="badge badge-teal">{{ obj.features.count }} features</span></td>
+    <td>{% if obj.is_most_popular %}<span class="badge badge-orange"><i class="fa-solid fa-star"></i> Yes</span>{% else %}<span class="text-muted">No</span>{% endif %}</td>
+    <td class="text-muted">{{ obj.button_label }}</td>
+    <td>{% if obj.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge" style="background:var(--bg3);color:var(--text3)">Off</span>{% endif %}</td>
+    <td><div class="flex gap-2">
+      <a href="{% url 'cadmin:pricing_edit' obj.pk %}" class="btn btn-blue btn-sm btn-icon"><i class="fa-solid fa-pen"></i></a>
+      <button onclick="confirmDelete('{% url 'cadmin:pricing_delete' obj.pk %}','{{ obj.heading|escapejs }}')" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-trash"></i></button>
+    </div></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-tag"></i></div><h3>No pricing cards</h3><a href="{% url 'cadmin:pricing_add' %}" class="btn btn-primary mt-2"><i class="fa-solid fa-plus"></i> Add Card</a></div>
+{% endif %}
+</div>
+{% endblock %}

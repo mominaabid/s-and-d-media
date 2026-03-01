@@ -1,0 +1,19 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/custom_admin.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+  <a href="{% url 'admin:index' %}">
+    <span style="color:#CDFF00;font-weight:800">S&amp;D</span>
+    <span style="color:#F3F3F2;font-weight:600"> Media</span>
+    <span style="font-size:11px;color:#888;margin-left:8px;font-weight:400">Admin</span>
+  </a>
+</h1>
+{% endblock %}

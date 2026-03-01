@@ -1,0 +1,63 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}{{ form_title }}{% endblock %}
+{% block page_title %}{{ form_title }}{% endblock %}
+{% block breadcrumb %}
+<span style="margin:0 4px;color:var(--text3)">/</span>
+<a href="{{ back_url }}">{{ section_title }}</a>
+<span style="margin:0 4px;color:var(--text3)">/</span>
+{{ form_title }}
+{% endblock %}
+
+{% block content %}
+<div style="max-width:780px">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+    <a href="{{ back_url }}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    <h2 class="section-title" style="margin-bottom:0">{{ form_title }}</h2>
+  </div>
+
+  <div class="card">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% if form.errors %}
+      <div class="alert alert-error" style="margin-bottom:18px">
+        <i class="fa-solid fa-circle-exclamation"></i> Please fix the errors below.
+      </div>
+      {% endif %}
+
+      <div class="form-grid">
+        {% for field in form %}
+        <div class="form-group {% if field.field.widget.input_type == 'textarea' or 'url' in field.html_name or field.html_name == 'subtitle' or field.html_name == 'review_text' or field.html_name == 'bio' or field.html_name == 'description' %}full{% endif %}">
+          <label for="{{ field.id_for_label }}">
+            {{ field.label }}{% if field.field.required %} <span style="color:var(--red)">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.help_text %}<span class="form-hint">{{ field.help_text }}</span>{% endif %}
+          {% for err in field.errors %}<span style="color:var(--red);font-size:12px">{{ err }}</span>{% endfor %}
+
+          {# Show current file if editing #}
+          {% if field.value and 'file' in field.html_name or 'video' in field.html_name or 'thumbnail' in field.html_name or 'picture' in field.html_name or 'logo' in field.html_name or 'background_video_file' in field.html_name %}
+            {% if field.value and field.value != False %}
+            <div class="current-file">
+              <i class="fa-solid fa-paperclip"></i> Current:
+              <a href="/media/{{ field.value }}" target="_blank" style="color:var(--teal)">{{ field.value }}</a>
+            </div>
+            {% endif %}
+          {% endif %}
+
+          {# Image preview for image fields #}
+          {% if 'picture' in field.html_name or 'thumbnail' in field.html_name or 'logo' in field.html_name %}
+          <img class="img-preview" id="preview_{{ field.html_name }}" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-top:8px;border:1px solid var(--border)"/>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <hr class="divider">
+      <div class="flex gap-3">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Save</button>
+        <a href="{{ back_url }}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

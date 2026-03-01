@@ -1,0 +1,57 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}Leads{% endblock %}
+{% block page_title %}Leads{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> Leads{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+  <div><h2 class="section-title">Leads & Submissions</h2><p class="section-sub">All submissions from the pricing section.</p></div>
+  <a href="{% url 'export-leads' %}" class="btn btn-primary"><i class="fa-solid fa-file-excel"></i> Export Excel</a>
+</div>
+
+<!-- Filter bar -->
+<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+  <a href="{% url 'cadmin:lead_list' %}" class="btn {% if not plan_filter %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">All ({{ total_leads }})</a>
+  <a href="?plan=bundle" class="btn {% if plan_filter == 'bundle' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm"><i class="fa-solid fa-box"></i> Bundle ({{ bundle_count }})</a>
+  <a href="?plan=custom" class="btn {% if plan_filter == 'custom' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i> Custom ({{ custom_count }})</a>
+  <a href="?plan=dedicated" class="btn {% if plan_filter == 'dedicated' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm"><i class="fa-solid fa-user-tie"></i> Dedicated ({{ dedicated_count }})</a>
+</div>
+
+<div class="card" style="padding:0">
+{% if objects %}
+<div class="table-wrap"><table>
+  <thead><tr><th>#</th><th>Name</th><th>Company</th><th>Phone</th><th>Email</th><th>Plan</th><th>Video Types</th><th>Date</th></tr></thead>
+  <tbody>
+  {% for obj in objects %}
+  <tr>
+    <td class="text-muted" style="font-size:11px">#{{ obj.pk }}</td>
+    <td style="font-weight:600">{{ obj.name }}</td>
+    <td class="text-muted">{{ obj.company_name|default:"–" }}</td>
+    <td class="text-muted">{{ obj.phone }}</td>
+    <td><a href="mailto:{{ obj.email }}" style="color:var(--blue);text-decoration:none;font-size:13px">{{ obj.email }}</a></td>
+    <td>
+      {% if obj.selected_plan == 'custom' %}<span class="badge badge-green">Custom</span>
+      {% elif obj.selected_plan == 'bundle' %}<span class="badge badge-blue">Bundle</span>
+      {% else %}<span class="badge badge-purple">Dedicated</span>{% endif %}
+    </td>
+    <td>
+      {% for vt in obj.selected_video_types.all %}
+      <span class="badge badge-teal" style="margin:1px">{{ vt.name }}</span>
+      {% empty %}<span class="text-muted">–</span>{% endfor %}
+    </td>
+    <td class="text-muted" style="white-space:nowrap">{{ obj.submitted_at|date:"d M Y H:i" }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% if is_paginated %}
+<div class="pagination">
+  {% if page_obj.has_previous %}<a href="?{% if plan_filter %}plan={{ plan_filter }}&{% endif %}page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-chevron-left"></i></a>{% endif %}
+  {% for num in page_obj.paginator.page_range %}{% if page_obj.number == num %}<span class="current">{{ num }}</span>{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}<a href="?{% if plan_filter %}plan={{ plan_filter }}&{% endif %}page={{ num }}">{{ num }}</a>{% endif %}{% endfor %}
+  {% if page_obj.has_next %}<a href="?{% if plan_filter %}plan={{ plan_filter }}&{% endif %}page={{ page_obj.next_page_number }}"><i class="fa-solid fa-chevron-right"></i></a>{% endif %}
+</div>
+{% endif %}
+{% else %}
+<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-inbox"></i></div><h3>No leads yet</h3><p>Submissions from the pricing section will appear here.</p></div>
+{% endif %}
+</div>
+{% endblock %}

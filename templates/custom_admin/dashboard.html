@@ -1,0 +1,231 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Welcome Banner -->
+<div style="background:linear-gradient(135deg,#1E1D23 0%,#252340 100%);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:24px 28px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;overflow:hidden;position:relative;">
+  <div style="position:absolute;right:-30px;top:-30px;width:200px;height:200px;border-radius:50%;background:rgba(205,255,0,0.04);pointer-events:none;"></div>
+  <div style="position:absolute;right:80px;bottom:-50px;width:140px;height:140px;border-radius:50%;background:rgba(79,142,247,0.05);pointer-events:none;"></div>
+  <div style="position:relative;z-index:1;">
+    <h1 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#F0EFFF;margin-bottom:5px;">Welcome back, {{ request.user.username }} 👋</h1>
+    <p style="color:#6B698A;font-size:13px;">Here's what's happening with S&D Media today.</p>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1;">
+    <a href="{% url 'cadmin:lead_list' %}" class="btn btn-primary"><i class="fa-solid fa-inbox"></i> View Leads</a>
+    <a href="{% url 'export-leads' %}" class="btn btn-secondary"><i class="fa-solid fa-file-excel"></i> Export Excel</a>
+  </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid" style="margin-bottom:22px;">
+
+  <a href="{% url 'cadmin:lead_list' %}" class="stat-card" style="--accent-color:#CDFF00;text-decoration:none;">
+    <div class="stat-info">
+      <div class="stat-label">Total Leads</div>
+      <div class="stat-value">{{ total_leads }}</div>
+      <div class="stat-sub">All time submissions</div>
+    </div>
+    <div class="stat-icon" style="background:rgba(205,255,0,0.10);color:#CDFF00;"><i class="fa-solid fa-inbox"></i></div>
+  </a>
+
+  <a href="{% url 'cadmin:lead_list' %}?plan=bundle" class="stat-card" style="--accent-color:#4F8EF7;text-decoration:none;">
+    <div class="stat-info">
+      <div class="stat-label">Bundle Orders</div>
+      <div class="stat-value">{{ bundle_leads }}</div>
+      <div class="stat-sub">Buy a Package</div>
+    </div>
+    <div class="stat-icon" style="background:rgba(79,142,247,0.12);color:#4F8EF7;"><i class="fa-solid fa-box"></i></div>
+  </a>
+
+  <a href="{% url 'cadmin:lead_list' %}?plan=custom" class="stat-card" style="--accent-color:#FF7A3D;text-decoration:none;">
+    <div class="stat-info">
+      <div class="stat-label">Custom Orders</div>
+      <div class="stat-value">{{ custom_leads }}</div>
+      <div class="stat-sub">Create Custom Order</div>
+    </div>
+    <div class="stat-icon" style="background:rgba(255,122,61,0.12);color:#FF7A3D;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+  </a>
+
+  <a href="{% url 'cadmin:lead_list' %}?plan=dedicated" class="stat-card" style="--accent-color:#A78BFA;text-decoration:none;">
+    <div class="stat-info">
+      <div class="stat-label">Meeting Requests</div>
+      <div class="stat-value">{{ dedicated_leads }}</div>
+      <div class="stat-sub">Dedicated Editor</div>
+    </div>
+    <div class="stat-icon" style="background:rgba(167,139,250,0.12);color:#A78BFA;"><i class="fa-solid fa-calendar-check"></i></div>
+  </a>
+
+  <a href="{% url 'cadmin:portfolio_category_list' %}" class="stat-card" style="--accent-color:#2DD4BF;text-decoration:none;">
+    <div class="stat-info">
+      <div class="stat-label">Portfolio Videos</div>
+      <div class="stat-value">{{ portfolio_videos }}</div>
+      <div class="stat-sub">Active videos</div>
+    </div>
+    <div class="stat-icon" style="background:rgba(45,212,191,0.12);color:#2DD4BF;"><i class="fa-solid fa-photo-film"></i></div>
+  </a>
+
+  <a href="{% url 'cadmin:team_list' %}" class="stat-card" style="--accent-color:#F472B6;text-decoration:none;">
+    <div class="stat-info">
+      <div class="stat-label">Team Members</div>
+      <div class="stat-value">{{ team_members }}</div>
+      <div class="stat-sub">Active members</div>
+    </div>
+    <div class="stat-icon" style="background:rgba(244,114,182,0.12);color:#F472B6;"><i class="fa-solid fa-users"></i></div>
+  </a>
+
+</div>
+
+<!-- Bottom Row -->
+<div class="dash-bottom">
+
+  <!-- Recent Leads Table -->
+  <div class="card" style="padding:0;min-width:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;">
+      <div class="card-title"><i class="fa-solid fa-clock" style="color:#FF7A3D;margin-right:8px;"></i>Recent Leads</div>
+      <a href="{% url 'cadmin:lead_list' %}" class="btn btn-secondary btn-sm">View All →</a>
+    </div>
+    {% if recent_leads %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Phone</th>
+            <th>Plan</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lead in recent_leads %}
+          <tr>
+            <td>
+              <div style="font-weight:600;color:#F0EFFF;">{{ lead.name }}</div>
+              <div style="font-size:11px;color:#6B698A;">{{ lead.email }}</div>
+            </td>
+            <td style="color:#A8A6C0;font-size:13px;">{{ lead.company_name|default:"–" }}</td>
+            <td style="color:#A8A6C0;font-size:13px;">{{ lead.phone }}</td>
+            <td>
+              {% if lead.selected_plan == 'custom' %}
+                <span class="badge badge-green">Custom</span>
+              {% elif lead.selected_plan == 'bundle' %}
+                <span class="badge badge-blue">Bundle</span>
+              {% else %}
+                <span class="badge badge-purple">Dedicated</span>
+              {% endif %}
+            </td>
+            <td style="color:#6B698A;font-size:12px;white-space:nowrap;">{{ lead.submitted_at|date:"d M, H:i" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon"><i class="fa-solid fa-inbox"></i></div>
+      <h3>No leads yet</h3>
+      <p>Submissions from the pricing section will appear here.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Right Column -->
+  <div style="display:flex;flex-direction:column;gap:16px;min-width:0;">
+
+    <!-- Quick Actions -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px;"><i class="fa-solid fa-bolt" style="color:#CDFF00;margin-right:8px;"></i>Quick Actions</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="{% url 'cadmin:hero_add' %}" class="btn btn-secondary w-full"><i class="fa-solid fa-film" style="color:#2DD4BF;"></i> Edit Hero</a>
+        <a href="{% url 'cadmin:logo_add' %}" class="btn btn-secondary w-full"><i class="fa-solid fa-plus" style="color:#CDFF00;"></i> Add Logo</a>
+        <a href="{% url 'cadmin:portfolio_video_add' %}" class="btn btn-secondary w-full"><i class="fa-solid fa-video" style="color:#FF7A3D;"></i> Add Portfolio Video</a>
+        <a href="{% url 'cadmin:team_add' %}" class="btn btn-secondary w-full"><i class="fa-solid fa-user-plus" style="color:#4F8EF7;"></i> Add Team Member</a>
+        <a href="{% url 'cadmin:review_add' %}" class="btn btn-secondary w-full"><i class="fa-solid fa-star" style="color:#A78BFA;"></i> Add Review</a>
+      </div>
+    </div>
+
+    <!-- Lead Breakdown — widths set via JS to avoid Django template CSS linter errors -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-chart-pie" style="color:#4F8EF7;margin-right:8px;"></i>Lead Breakdown</div>
+      {% if total_leads > 0 %}
+      <div style="display:flex;flex-direction:column;gap:12px;">
+
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+            <span style="font-size:12px;font-weight:600;color:#4F8EF7;">Bundle</span>
+            <span style="font-size:12px;font-weight:700;color:#F0EFFF;">{{ bundle_leads }}</span>
+          </div>
+          <div style="background:#2E2C3A;border-radius:20px;height:6px;overflow:hidden;">
+            <div class="bar-fill" data-pct="{% widthratio bundle_leads total_leads 100 %}" style="background:#4F8EF7;height:100%;width:0%;border-radius:20px;transition:width .6s ease;"></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+            <span style="font-size:12px;font-weight:600;color:#CDFF00;">Custom</span>
+            <span style="font-size:12px;font-weight:700;color:#F0EFFF;">{{ custom_leads }}</span>
+          </div>
+          <div style="background:#2E2C3A;border-radius:20px;height:6px;overflow:hidden;">
+            <div class="bar-fill" data-pct="{% widthratio custom_leads total_leads 100 %}" style="background:#CDFF00;height:100%;width:0%;border-radius:20px;transition:width .6s ease;"></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+            <span style="font-size:12px;font-weight:600;color:#A78BFA;">Dedicated</span>
+            <span style="font-size:12px;font-weight:700;color:#F0EFFF;">{{ dedicated_leads }}</span>
+          </div>
+          <div style="background:#2E2C3A;border-radius:20px;height:6px;overflow:hidden;">
+            <div class="bar-fill" data-pct="{% widthratio dedicated_leads total_leads 100 %}" style="background:#A78BFA;height:100%;width:0%;border-radius:20px;transition:width .6s ease;"></div>
+          </div>
+        </div>
+
+      </div>
+      {% else %}
+      <p style="color:#6B698A;font-size:13px;">No lead data yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Dashboard bottom row — responsive grid */
+  .dash-bottom {
+    display: grid;
+    grid-template-columns: 1fr 270px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .dash-bottom {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .stats-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+  }
+  @media (max-width: 400px) {
+    .stats-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  /* Animate bar fills using data-pct attribute — avoids Django template tags inside CSS */
+  document.querySelectorAll('.bar-fill').forEach(function(el) {
+    var pct = el.getAttribute('data-pct') || '0';
+    setTimeout(function() { el.style.width = pct + '%'; }, 100);
+  });
+</script>
+{% endblock %}

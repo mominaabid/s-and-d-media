@@ -1,0 +1,574 @@
+/* ============================================================
+   S&D Media Admin Panel – Custom Theme
+   Color Palette:
+     Background:  #222120 → #363432 → #4A4845
+     Text:        #F3F3F2 / #DADADA
+     Accent:      #CDFF00 (Neon Green)
+   ============================================================ */
+
+:root {
+  --bg-darkest:   #222120;
+  --bg-dark:      #363432;
+  --bg-mid:       #4A4845;
+  --bg-light:     #5a5653;
+  --text-white:   #F3F3F2;
+  --text-muted:   #DADADA;
+  --accent:       #CDFF00;
+  --accent-hover: #b8e600;
+  --accent-dark:  #222120;
+  --border:       #4A4845;
+  --danger:       #e74c3c;
+  --success:      #CDFF00;
+}
+
+/* ── BODY & BASE ───────────────────────────────────────────── */
+body, html {
+  background: var(--bg-darkest) !important;
+  color: var(--text-white) !important;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif !important;
+}
+
+/* ── HEADER / BRANDING ─────────────────────────────────────── */
+#header {
+  background: var(--bg-dark) !important;
+  color: var(--text-white) !important;
+  border-bottom: 2px solid var(--accent) !important;
+  padding: 10px 20px !important;
+}
+
+#header a:link, #header a:visited {
+  color: var(--text-white) !important;
+}
+
+#branding h1 {
+  color: var(--text-white) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+}
+
+#branding h1 a {
+  color: var(--text-white) !important;
+  text-decoration: none;
+}
+
+#user-tools {
+  color: var(--text-muted) !important;
+}
+
+#user-tools a {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+#user-tools a:hover {
+  color: var(--accent-hover) !important;
+  text-decoration: underline;
+}
+
+/* ── NAVIGATION ───────────────────────────────────────────── */
+.breadcrumbs {
+  background: var(--bg-mid) !important;
+  color: var(--text-muted) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 8px 20px !important;
+}
+
+.breadcrumbs a {
+  color: var(--accent) !important;
+}
+
+/* ── SIDEBAR / NAV MODULES ────────────────────────────────── */
+#nav-sidebar {
+  background: var(--bg-dark) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+#nav-sidebar .current-app .section:link,
+#nav-sidebar .current-app .section:visited {
+  color: var(--accent) !important;
+}
+
+.toggle-nav-sidebar {
+  background: var(--bg-dark) !important;
+  border-right: 1px solid var(--border) !important;
+  color: var(--text-muted) !important;
+}
+
+/* ── CONTENT AREA ─────────────────────────────────────────── */
+#content {
+  background: var(--bg-darkest) !important;
+  color: var(--text-white) !important;
+}
+
+#content-main {
+  background: var(--bg-darkest) !important;
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--text-white) !important;
+}
+
+/* ── MODULES (index boxes) ────────────────────────────────── */
+.module {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  margin-bottom: 16px !important;
+  overflow: hidden;
+}
+
+.module h2, .module caption, .module .module-header {
+  background: var(--bg-mid) !important;
+  color: var(--text-white) !important;
+  padding: 12px 16px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.module table {
+  background: var(--bg-dark) !important;
+}
+
+/* ── APP INDEX (left sidebar list) ───────────────────────── */
+.app-core .section {
+  color: var(--accent) !important;
+}
+
+/* ── TABLES ───────────────────────────────────────────────── */
+table {
+  background: var(--bg-dark) !important;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+thead th {
+  background: var(--bg-mid) !important;
+  color: var(--text-white) !important;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 14px !important;
+  border-bottom: 2px solid var(--accent) !important;
+}
+
+tbody tr {
+  background: var(--bg-dark) !important;
+  border-bottom: 1px solid var(--border) !important;
+  transition: background 0.15s;
+}
+
+tbody tr:hover, tbody tr.selected {
+  background: var(--bg-mid) !important;
+}
+
+tbody td, tbody th {
+  color: var(--text-white) !important;
+  padding: 10px 14px !important;
+  font-size: 13px;
+}
+
+tfoot {
+  background: var(--bg-mid) !important;
+}
+
+/* ── CHANGE LIST ─────────────────────────────────────────── */
+#changelist {
+  background: var(--bg-darkest) !important;
+}
+
+#changelist-filter {
+  background: var(--bg-dark) !important;
+  border-left: 2px solid var(--accent) !important;
+  border-radius: 8px !important;
+}
+
+#changelist-filter h2 {
+  background: var(--bg-mid) !important;
+  color: var(--text-white) !important;
+  border-radius: 6px 6px 0 0 !important;
+  padding: 10px 14px !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+#changelist-filter h3 {
+  color: var(--accent) !important;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  margin: 12px 14px 6px !important;
+}
+
+#changelist-filter li {
+  padding: 3px 14px !important;
+}
+
+#changelist-filter li a {
+  color: var(--text-muted) !important;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+#changelist-filter li.selected a,
+#changelist-filter li a:hover {
+  color: var(--accent) !important;
+}
+
+/* Toolbar */
+#toolbar {
+  background: var(--bg-mid) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  border: 1px solid var(--border) !important;
+  margin-bottom: 12px;
+}
+
+#searchbar {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-white) !important;
+  border-radius: 6px !important;
+  padding: 6px 12px !important;
+}
+
+#searchbar:focus {
+  border-color: var(--accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(205,255,0,0.2);
+}
+
+/* Pagination */
+.paginator {
+  background: var(--bg-dark) !important;
+  color: var(--text-muted) !important;
+  border-top: 1px solid var(--border) !important;
+  padding: 10px 14px !important;
+}
+
+.paginator a {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+/* Date hierarchy */
+.xfull {
+  background: var(--bg-dark) !important;
+}
+
+/* ── FORMS ────────────────────────────────────────────────── */
+.form-row {
+  border-bottom: 1px solid var(--border) !important;
+  padding: 12px 0 !important;
+}
+
+label {
+  color: var(--text-muted) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+
+input[type=text], input[type=url], input[type=email],
+input[type=password], input[type=number],
+select, textarea {
+  background: var(--bg-mid) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-white) !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  transition: border-color 0.2s;
+}
+
+input[type=text]:focus, input[type=url]:focus, input[type=email]:focus,
+input[type=password]:focus, input[type=number]:focus,
+select:focus, textarea:focus {
+  border-color: var(--accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(205,255,0,0.15) !important;
+}
+
+select option {
+  background: var(--bg-dark) !important;
+  color: var(--text-white) !important;
+}
+
+.help {
+  color: #888 !important;
+  font-size: 11px !important;
+  font-style: italic;
+}
+
+.errorlist {
+  color: var(--danger) !important;
+  background: rgba(231,76,60,0.1) !important;
+  border: 1px solid var(--danger) !important;
+  border-radius: 6px;
+  padding: 8px 12px;
+  list-style: none;
+  margin-bottom: 8px;
+}
+
+/* Fieldsets */
+fieldset {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  margin-bottom: 16px !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+fieldset h2 {
+  background: var(--bg-mid) !important;
+  color: var(--text-white) !important;
+  padding: 10px 16px !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border) !important;
+  margin: 0 !important;
+}
+
+fieldset .fieldBox {
+  padding: 4px 16px !important;
+}
+
+/* Inlines */
+.inline-group {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.inline-group h2 {
+  background: var(--bg-mid) !important;
+  color: var(--text-white) !important;
+  padding: 10px 16px !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.tabular thead th {
+  background: var(--bg-mid) !important;
+  color: var(--text-muted) !important;
+}
+
+/* ── BUTTONS ──────────────────────────────────────────────── */
+.button, input[type=submit], input[type=button],
+.submit-row input, a.button {
+  background: var(--accent) !important;
+  color: var(--accent-dark) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 8px 18px !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.button:hover, input[type=submit]:hover, .submit-row input:hover, a.button:hover {
+  background: var(--accent-hover) !important;
+  transform: translateY(-1px);
+}
+
+.button.default {
+  background: var(--accent) !important;
+  color: var(--accent-dark) !important;
+  font-weight: 800 !important;
+}
+
+/* Delete button */
+.deletelink, .deletelink-box a {
+  background: var(--danger) !important;
+  color: #fff !important;
+}
+
+/* Submit row */
+.submit-row {
+  background: var(--bg-dark) !important;
+  border-top: 1px solid var(--border) !important;
+  border-radius: 0 0 8px 8px !important;
+  padding: 12px 16px !important;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Actions dropdown */
+select[name=action] {
+  background: var(--bg-mid) !important;
+  color: var(--text-white) !important;
+  border: 1px solid var(--accent) !important;
+}
+
+/* ── MESSAGES / ALERTS ────────────────────────────────────── */
+.messagelist {
+  padding: 0 !important;
+  margin: 0 0 16px 0 !important;
+  list-style: none;
+}
+
+.messagelist li {
+  background: var(--bg-dark) !important;
+  border-left: 4px solid var(--accent) !important;
+  color: var(--text-white) !important;
+  padding: 12px 16px !important;
+  margin-bottom: 8px;
+  border-radius: 0 6px 6px 0 !important;
+  font-size: 13px;
+}
+
+.messagelist li.error {
+  border-left-color: var(--danger) !important;
+  background: rgba(231,76,60,0.1) !important;
+}
+
+.messagelist li.warning {
+  border-left-color: #f39c12 !important;
+}
+
+/* ── DASHBOARD INDEX ──────────────────────────────────────── */
+#content-related .module h2 {
+  font-size: 12px !important;
+  text-transform: uppercase;
+}
+
+#recent-actions-module {
+  background: var(--bg-dark) !important;
+}
+
+/* ── OBJECT TOOLS ─────────────────────────────────────────── */
+.object-tools a {
+  background: transparent !important;
+  border: 1px solid var(--accent) !important;
+  color: var(--accent) !important;
+  border-radius: 20px !important;
+  padding: 5px 14px !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  transition: all 0.2s;
+}
+
+.object-tools a:hover {
+  background: var(--accent) !important;
+  color: var(--accent-dark) !important;
+}
+
+/* ── CALENDAR / DATE PICKER ───────────────────────────────── */
+.calendarbox, .clockbox {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  color: var(--text-white) !important;
+}
+
+/* ── MISC ─────────────────────────────────────────────────── */
+hr {
+  border-color: var(--border) !important;
+}
+
+a {
+  color: var(--accent) !important;
+}
+
+a:hover {
+  color: var(--accent-hover) !important;
+}
+
+.addlink, .changelink, .viewlink {
+  color: var(--accent) !important;
+}
+
+/* Stats row on dashboard */
+.stats-box {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 24px;
+  min-width: 160px;
+  text-align: center;
+  border-top: 3px solid var(--accent);
+}
+
+.stat-card .stat-number {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+.stat-card .stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* Login page */
+body.login {
+  background: var(--bg-darkest) !important;
+}
+
+#login-form {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  border-top: 3px solid var(--accent) !important;
+}
+
+.login #header {
+  background: var(--bg-dark) !important;
+  border-bottom: 2px solid var(--accent) !important;
+}
+
+/* File input */
+p.file-upload {
+  color: var(--text-muted) !important;
+  font-size: 12px;
+}
+
+input[type=file] {
+  color: var(--text-muted) !important;
+}
+
+/* Checkbox styling */
+input[type=checkbox] {
+  accent-color: var(--accent) !important;
+}
+
+/* Filter horizontal */
+.selector-available h2, .selector-chosen h2 {
+  background: var(--bg-mid) !important;
+  color: var(--text-muted) !important;
+  text-transform: uppercase;
+  font-size: 11px !important;
+}
+
+.selector-available select, .selector-chosen select {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-white) !important;
+}
+
+.selector-chooser li {
+  background: var(--bg-mid) !important;
+}

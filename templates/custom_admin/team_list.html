@@ -1,0 +1,35 @@
+{% extends "custom_admin/base.html" %}
+{% block title %}Our Team{% endblock %}
+{% block page_title %}Our Team{% endblock %}
+{% block breadcrumb %}<span class="sep">/</span> Team{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+  <div><h2 class="section-title">Our Team</h2><p class="section-sub">Team members shown on the website.</p></div>
+  <a href="{% url 'cadmin:team_add' %}" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Add Member</a>
+</div>
+<div class="card" style="padding:0">
+{% if objects %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Photo</th><th>Name</th><th>Role</th><th>LinkedIn</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for obj in objects %}
+  <tr>
+    <td><div class="thumb" style="border-radius:50%">{% if obj.picture %}<img src="{{ obj.picture.url }}" />{% else %}<i class="fa-solid fa-user"></i>{% endif %}</div></td>
+    <td style="font-weight:600">{{ obj.name }}</td>
+    <td class="text-muted">{{ obj.role }}</td>
+    <td>{% if obj.linkedin_url %}<a href="{{ obj.linkedin_url }}" target="_blank" class="video-link"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>{% else %}<span class="text-muted">–</span>{% endif %}</td>
+    <td class="text-muted">{{ obj.order }}</td>
+    <td>{% if obj.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge" style="background:var(--bg3);color:var(--text3)">Off</span>{% endif %}</td>
+    <td><div class="flex gap-2">
+      <a href="{% url 'cadmin:team_edit' obj.pk %}" class="btn btn-blue btn-sm btn-icon"><i class="fa-solid fa-pen"></i></a>
+      <button onclick="confirmDelete('{% url 'cadmin:team_delete' obj.pk %}','{{ obj.name|escapejs }}')" class="btn btn-danger btn-sm btn-icon"><i class="fa-solid fa-trash"></i></button>
+    </div></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-users"></i></div><h3>No team members yet</h3><a href="{% url 'cadmin:team_add' %}" class="btn btn-primary mt-2"><i class="fa-solid fa-user-plus"></i> Add Member</a></div>
+{% endif %}
+</div>
+{% endblock %}
